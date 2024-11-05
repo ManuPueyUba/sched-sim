@@ -6,11 +6,18 @@
 extern struct proc proc[];
 
 struct proc* select_next(){
-    int n = rand() % NUMPROC;
-    if (proc[n].status == RUNNABLE) {
-        return &proc[n];
+    int next_random = -1;
+    struct proc* next = NULL;
+    for (int i = 0; i < NUMPROC; i++){
+        if (proc[i].status == RUNNABLE){
+            int random = rand();
+            if (random > next_random){
+                next_random = random;
+                next = &proc[i];
+            }
+        }
     }
-    return NULL;
+    return next;
 }
 
 void scheduler(){
