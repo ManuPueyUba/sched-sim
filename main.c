@@ -5,6 +5,8 @@
 #include "switch.h"
 
 #define STEPS 100000
+#define WEIGHTS_SIZE 5
+const int WEIGHTS[WEIGHTS_SIZE] = {64, 32, 16, 8, 4};
 
 struct proc proc[NUMPROC];
 struct proc_type proc_type[NUMPROC] = {CPU1, CPU1, CPU2, IO1, IO2};
@@ -17,6 +19,7 @@ void init(){
     for (int i=0; i<NUMPROC; i++){
         proc[i].pid = i;
         proc[i].status = RUNNABLE;
+        proc[i].priority = WEIGHTS[i];
         proc[i].runtime = 0;
     }
 }

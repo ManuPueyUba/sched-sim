@@ -9,13 +9,13 @@ extern struct proc proc[];
 extern struct proc_type proc_type[];
 
 struct proc_stats {
-    int runtime;
+    float runtime;
 };
 
 struct sim_status {
     int remaining_steps;
-    int runtime;
-    int idle_runtime;
+    float runtime;
+    float idle_runtime;
     struct proc_type proc_type[NUMPROC];
     struct proc_stats proc_stats[NUMPROC];
 } sim_status;
@@ -36,10 +36,10 @@ int should_unlock(struct proc_type *pc){
 
 void init_simulation(int steps){
     sim_status.remaining_steps = steps;
-    sim_status.runtime = 0;
+    sim_status.runtime = 0.0;
 
     for (int i = 0; i < NUMPROC; i++) {
-        sim_status.proc_stats[i].runtime = 0;
+        sim_status.proc_stats[i].runtime = 0.0;
         sim_status.proc_type[i] = proc_type[i];
     }
 }
@@ -67,8 +67,8 @@ struct proc_stats* pstats(struct proc* target){
     return &sim_status.proc_stats[target->pid];
 }
 
-int swtch(struct proc* target){
-    int intended;
+float swtch(struct proc* target){
+    float intended;
 
     step();
 
@@ -80,13 +80,13 @@ int swtch(struct proc* target){
         target->status = BLOCKED;
     }
 
-    pstats(target)->runtime += intended;
-    sim_status.runtime += intended;
+    pstats(target)->runtime += (intended/(target->priority));
+    sim_status.runtime += intended/(target->priority);
     return intended;
 }
 
-int idle(){
-    int intended;
+float idle(){
+    float intended;
     step();
     intended = intended_run(&idle_type);
     sim_status.runtime += intended;
@@ -100,7 +100,7 @@ void print_stats(){
     double rt;
     rt = (double) sim_status.runtime;
     
-    printf("Total time: %d\n", sim_status.runtime);
+    printf("Total time: %f\n", sim_status.runtime);
     printf("Idle time: %.0f%%\n", 100 * (double) sim_status.idle_runtime / rt);
 
     for(int i=0; i < NUMPROC; i++) {

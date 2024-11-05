@@ -15,8 +15,8 @@ struct proc_type {
 
 void init_simulation(int steps);
 int done();
-int swtch(struct proc* target);
-int idle();
+float swtch(struct proc* target);
+float idle();
 void print_stats();
 
 #endif

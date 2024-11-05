@@ -6,7 +6,7 @@
 extern struct proc proc[];
 
 struct proc* select_next(){
-    int min_runtime = INT_MAX;
+    float min_runtime = INT_MAX;
     struct proc *next = NULL;
     for (int i = 0; i < NUMPROC; i++){
         if (proc[i].status == RUNNABLE && proc[i].runtime < min_runtime){
