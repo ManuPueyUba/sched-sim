@@ -6,6 +6,10 @@
 extern struct proc proc[];
 
 struct proc* select_next(){
+    int n = rand() % NUMPROC;
+    if (proc[n].status == RUNNABLE) {
+        return &proc[n];
+    }
     return NULL;
 }
 
